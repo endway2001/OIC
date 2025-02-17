@@ -1,31 +1,146 @@
-Federated Learning System for Large-Scale IoT Networks
-This repository implements a state-of-the-art Federated Learning (FL) system tailored for decentralized IoT networks. It combines advanced techniques such as Graph Neural Networks (GNN), Deep Reinforcement Learning (DRL), and semi-synchronous training to address challenges in scalability, resource efficiency, and model accuracy. Below is an overview of the system's workflow and key innovations.
+# Federated Learning for Large-Scale IoT Networks
 
-System Workflow
-Device Clustering with GNN-KMeans
-Devices are grouped into logical clusters based on their data distribution, characteristics, and network constraints. A Graph Neural Network (GNN) models device relationships, and KMeans clustering assigns devices to clusters with similar traits. This ensures efficient resource allocation and reduces variance during model aggregation.
+This repository implements a state-of-the-art **Federated Learning (FL)** system designed for large-scale, decentralized IoT networks. By leveraging advanced techniques such as **Graph Neural Networks (GNN)**, **Deep Reinforcement Learning (DRL)**, and **semi-synchronous training**, this system addresses key challenges in scalability, resource efficiency, and model accuracy. Below, you'll find an overview of the system architecture, workflow, key innovations, and instructions to get started.
 
-Hybrid Data Redistribution
-Within each cluster, devices exchange portions of their datasets to balance label diversity and sample quantity. A threshold-based redistribution policy prioritizes devices with less diverse data while respecting privacy constraints, improving local model representativeness.
+---
 
-Device Assignment and Scheduling with DRL-PPO
-Cluster-to-Edge Assignment : A DRL agent using Proximal Policy Optimization (PPO) assigns clusters to edge servers, optimizing bandwidth and server capacity utilization.
-Device Scheduling : Another DRL-PPO agent selects the optimal subset of devices within each cluster for training, considering energy usage, bandwidth availability, and data diversity.
-Semi-Synchronous Federated Learning
-Edge-Level Training : Each edge server trains its assigned devices sequentially but independently of other edge servers. Device-specific characteristics (e.g., CPU power, memory) influence batch size, training time, and energy consumption.
-Synchronous Aggregation : Models from devices within an edge server are aggregated synchronously, and edge-level models are sent to the cloud for global aggregation.
-Dynamic Adaptation : Device assignments and schedules are recalculated after each global iteration to adapt to changing conditions.
+## Table of Contents
 
-Metrics Logging and Analysis
-Comprehensive metrics such as energy consumption, time delays, and bandwidth usage are tracked across devices, edge servers, and the cloud. These metrics are saved as JSON files for analysis and debugging.
+1. [System Overview](#system-overview)  
+2. [Workflow](#workflow)  
+   - [1. Device Clustering with GNN-KMeans](#1-device-clustering-with-gnn-kmeans)  
+   - [2. Hybrid Data Redistribution](#2-hybrid-data-redistribution)  
+   - [3. Device Assignment and Scheduling with DRL-PPO](#3-device-assignment-and-scheduling-with-drl-ppo)  
+   - [4. Semi-Synchronous Federated Learning](#4-semi-synchronous-federated-learning)  
+   - [5. Metrics Logging and Analysis](#5-metrics-logging-and-analysis)  
+3. [Key Innovations](#key-innovations)  
+4. [Benefits](#benefits)  
+5. [Use Cases](#use-cases)  
+6. [Getting Started](#getting-started)  
+7. [Contributing](#contributing)  
 
-Key Innovations
-Device-Specific Training : Local training accounts for device-specific CPU power and memory capacity, optimizing batch sizes, training times, and energy consumption.
-Concurrency Control : Limits the number of concurrently active edge servers to respect resource constraints.
-Dynamic Adaptation : Recalculates device assignments and schedules after each global iteration, ensuring sustained performance in dynamic environments.
+---
 
-Benefits of the System
-Efficiency : Optimized use of computational resources at devices and edge servers, reducing communication costs and delays.
-Scalability : Supports large-scale IoT networks with diverse devices and dynamic conditions.
-Accuracy : Balanced data distribution and optimal scheduling enhance global model performance.
-Adaptability : Dynamic adjustments ensure sustained performance in changing environments.
+## System Overview
+
+This Federated Learning system is tailored for **large-scale IoT networks** where devices are distributed across diverse environments with varying computational capabilities and network constraints. The system integrates advanced techniques to optimize resource utilization, balance data distribution, and improve global model accuracy while maintaining adaptability to dynamic conditions.
+
+---
+
+## Workflow
+
+### 1. Device Clustering with GNN-KMeans
+
+Devices are grouped into logical clusters based on their **data distribution**, **characteristics**, and **network constraints**:
+- A **Graph Neural Network (GNN)** models the relationships between devices, capturing both their features and interconnectivity.
+- A **KMeans clustering algorithm** operates on the embeddings generated by the GNN to group devices with similar traits.
+- Outcome: Devices are assigned to clusters, ensuring that devices with similar data and characteristics are grouped together, reducing variance during model aggregation.
+
+### 2. Hybrid Data Redistribution
+
+Within each cluster, devices exchange portions of their datasets to balance label diversity and sample quantity:
+- A **hybrid redistribution policy** prioritizes devices with less diverse data while respecting privacy constraints.
+- Label diversity and sample quantity are considered to improve local model representativeness.
+- Outcome: Each device within a cluster holds a more balanced dataset, reducing model bias and improving global model accuracy.
+
+### 3. Device Assignment and Scheduling with DRL-PPO
+
+Two **Deep Reinforcement Learning (DRL)** agents using the **Proximal Policy Optimization (PPO)** algorithm optimize device assignments and scheduling:
+- **Cluster-to-Edge Assignment**: A DRL agent assigns clusters to edge servers based on available bandwidth and server capacity, minimizing load imbalance and maximizing resource utilization.
+- **Device Scheduling**: Another DRL agent selects the optimal subset of devices within each cluster for training, considering factors like energy usage, bandwidth availability, and data diversity.
+- Outcome: Efficient utilization of edge server resources and reduced communication overhead.
+
+### 4. Semi-Synchronous Federated Learning
+
+The system combines the benefits of synchronous and asynchronous training to balance efficiency and performance:
+- **Edge-Level Independence**: Each edge server trains its assigned devices sequentially but independently of other edge servers. Training accounts for device-specific characteristics such as CPU power and memory.
+- **Synchronous Aggregation**: Models from devices within an edge server are aggregated synchronously, and edge-level models are sent to the cloud for global aggregation.
+- **Dynamic Adaptation**: Device assignments and schedules are recalculated after each global iteration to adapt to changing conditions.
+- Outcome: Reduced global synchronization bottlenecks and enhanced scalability for large-scale IoT networks.
+
+### 5. Metrics Logging and Analysis
+
+Comprehensive metrics are tracked and logged throughout the workflow:
+- **Energy Consumption**: Tracks energy usage across devices and edge servers.
+- **Time Delays**: Monitors training and communication delays.
+- **Bandwidth Usage**: Logs bandwidth consumption for data exchange and model updates.
+- Metrics are saved as **JSON files** for analysis and debugging.
+
+---
+
+## Key Innovations
+
+- **Device-Specific Training**: Local training accounts for device-specific CPU power and memory capacity, optimizing batch sizes, training times, and energy consumption.
+- **Concurrency Control**: Limits the number of concurrently active edge servers to respect resource constraints.
+- **Dynamic Adaptation**: Recalculates device assignments and schedules after each global iteration, ensuring sustained performance in dynamic environments.
+
+---
+
+## Benefits
+
+- **Efficiency**: Optimized use of computational resources at devices and edge servers, reducing communication costs and delays.
+- **Scalability**: Supports large-scale IoT networks with diverse devices and dynamic conditions.
+- **Accuracy**: Balanced data distribution and optimal scheduling enhance global model performance.
+- **Adaptability**: Dynamic adjustments ensure sustained performance in changing environments.
+
+---
+
+## Use Cases
+
+This system is ideal for applications in decentralized IoT networks, including:
+- **Smart Cities**: Traffic monitoring, environmental sensing, and urban infrastructure management.
+- **Industrial IoT**: Predictive maintenance, quality control, and supply chain optimization.
+- **Healthcare Monitoring**: Remote patient monitoring, wearable devices, and medical diagnostics.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Required libraries: PyTorch, TensorFlow, NumPy, Pandas, etc. (see `requirements.txt`)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/federated-learning-iot.git
+   cd federated-learning-iot
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the simulation:
+   ```bash
+   python run_simulation.py
+   ```
+
+### Analyzing Results
+
+- Metrics are saved as JSON files in the `logs/` directory.
+- Use the provided visualization scripts to analyze energy consumption, time delays, and bandwidth usage.
+
+---
+
+## Contributing
+
+We welcome contributions! To contribute:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Submit a pull request with a detailed description of your changes.
+
+For questions or issues, please open an issue in the repository.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+By combining cutting-edge techniques with practical considerations for IoT networks, this Federated Learning system demonstrates how to achieve scalability, efficiency, and accuracy in decentralized environments. Explore the repository, run the simulations, and contribute to advancing the field of Federated Learning!
